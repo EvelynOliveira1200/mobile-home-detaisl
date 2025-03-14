@@ -1,54 +1,132 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground } from "react-native";
 import * as SecureStore from "expo-secure-store";
 
+export default function CadastroScreen() {
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [confirmEmail, setConfirmEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-const TextoExibido = ({ titulo, texto, cor }) => (
-    <Text style={[styles.texto, { color: cor }]}>
-        {titulo}: {texto || "Nenhum texto salvo"}
-    </Text>
-);
-
-export default function DetalhesScreen({ route }) {
-    const { textoNaoPersistido } = route.params || {};
-    const [textoPersistido, setTextoPersistido] = useState("");
-
-    useEffect(() => {
-        const carregarTextoPersistido = async () => {
-            const textoSalvo = await SecureStore.getItemAsync("meuTexto");
-            if (textoSalvo) {
-                setTextoPersistido(textoSalvo);
-            }
-        };
-        carregarTextoPersistido();
-    }, []);
+    const salvarCredenciais = async () => {
+        if (username.trim() === "" || email.trim() === "" || confirmEmail.trim() === "" || password.trim() === "") {
+            Alert.alert("Erro", "Preencha todos os campos");
+            return;
+        }
+        if (email !== confirmEmail) {
+            Alert.alert("Erro", "Os emails não coincidem");
+            return;
+        }
+        try {
+            await SecureStore.setItemAsync("username", username);
+            await SecureStore.setItemAsync("userEmail", email);
+            await SecureStore.setItemAsync("userPassword", password);
+            Alert.alert("Sucesso", "Cadastro realizado com sucesso!");
+            setUsername('');
+            setEmail('');
+            setConfirmEmail('');
+            setPassword('');
+        } catch (error) {
+            Alert.alert("Erro", "Falha ao salvar credenciais");
+        }
+    };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.titulo}>Detalhes</Text>
-            <TextoExibido titulo="Sem persistência" texto={textoNaoPersistido} cor="#AA1945" />
-            <TextoExibido titulo="Persistência" texto={textoPersistido} cor="#CC8899" />
-        </View>
+        <ImageBackground source={require('../img/fundo.jpg')} style={styles.background}>
+            <View style={styles.overlay} />
+            <View style={styles.container}>
+                <Text style={styles.titulo}>Cadastro</Text>
+                
+                <TextInput
+                    style={styles.input}
+                    placeholder="Nome de usuário"
+                    placeholderTextColor="#B0A496"
+                    value={username}
+                    onChangeText={setUsername}
+                    autoCapitalize="none"
+                />
+                
+                <TextInput
+                    style={styles.input}
+                    placeholder="Email"
+                    placeholderTextColor="#B0A496"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                />
+                
+                <TextInput
+                    style={styles.input}
+                    placeholder="Confirme seu Email"
+                    placeholderTextColor="#B0A496"
+                    value={confirmEmail}
+                    onChangeText={setConfirmEmail}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                />
+
+                <TextInput
+                    style={styles.input}
+                    placeholder="Senha"
+                    placeholderTextColor="#B0A496"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                />
+
+                <TouchableOpacity style={styles.botao} onPress={salvarCredenciais}>
+                style={styles.button}
+                onPress={() => navigation.navigate("Perfil")}
+        
+                    <Text style={styles.textoBotao}>Cadastrar</Text>
+                </TouchableOpacity>
+            </View>
+        </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
+    background: {
+        flex: 1,
+        resizeMode: 'cover',
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0, 0, 0, 0.4)', 
+    },
     container: {
         flex: 1,
-        gap: 50,
-        paddingVertical: 100,
-        paddingHorizontal: 25,
-        backgroundColor:"#FADCD9",
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
     },
     titulo: {
-        fontSize: 32,
-        textAlign: "center",
-        color: "#391306",
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#FFF',
+        marginBottom: 20,
     },
-    texto: {
-        fontSize: 20,
-        textAlign: "center",
-        color: "#67595E", 
+    input: {
+        width: '100%',
+        backgroundColor: '#FFF',
+        padding: 15,
+        borderRadius: 10,
+        marginBottom: 15,
+        borderWidth: 1,
+        borderColor: '#E0D6CC',
+    },
 
-    },
+    botao: {
+    width: '100%',
+    backgroundColor: '#6D4C41',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+},
+   textoBotao: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+},
 });

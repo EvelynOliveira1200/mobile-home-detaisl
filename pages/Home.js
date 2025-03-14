@@ -1,134 +1,138 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import * as SecureStore from "expo-secure-store";
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Alert } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
-
-const TextoExibido = ({ titulo, texto, cor }) => (
-    <Text style={[styles.texto, { color: cor }]}>
-        {titulo}: {texto || "Nenhum texto salvo"}
-    </Text>
-);
-
-export default function HomeScreen({ navigation }) {
-    const [texto, setTexto] = useState("");
-    const [email, setEmail] = useState("");
-    const [senha, setSenha] = useState("");
-    const [textoPersistido, setTextoPersistido] = useState("");
-    const [textoSalvoSemPersistencia, setTextoSalvoSemPersistencia] = useState("");
+const LoginScreen = ({ navigation }) => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [savedEmail, setSavedEmail] = useState('');
+    const [savedPassword, setSavedPassword] = useState('');
+    const textoSalvoSemPersistencia = "Texto exemplo";
 
     useEffect(() => {
-        const carregarTextoPersistido = async () => {
-            const textoSalvo = await SecureStore.getItemAsync("meuTexto");
-            if (textoSalvo) {
-                setTextoPersistido(textoSalvo);
+        const loadCredentials = async () => {
+            try {
+                const storedEmail = await SecureStore.getItemAsync("userEmail");
+                const storedPassword = await SecureStore.getItemAsync("userPassword");
+                if (storedEmail && storedPassword) {
+                    setSavedEmail(storedEmail);
+                    setSavedPassword(storedPassword);
+                }
+            } catch (error) {
+                Alert.alert("Erro", "Falha ao carregar credenciais");
             }
         };
-        carregarTextoPersistido();
+        loadCredentials();
     }, []);
 
-    const salvarTexto = async () => {
-        if (!texto.trim()) {
-            alert("Por favor, insira algo.");
+    const handleLogin = async () => {
+        if (!email.trim() || !password.trim()) {
+            Alert.alert("Erro", "Por favor, preencha todos os campos.");
             return;
         }
-        await SecureStore.setItemAsync("meuTexto", texto);
-        setTextoPersistido(texto);
-        setTextoSalvoSemPersistencia(texto);
-        setTexto("");
+        try {
+            await SecureStore.setItemAsync("userEmail", email);
+            await SecureStore.setItemAsync("userPassword", password);
+            setSavedEmail(email);
+            setSavedPassword(password);
+            Alert.alert("Sucesso", "Login realizado com sucesso!");
+            setEmail('');
+            setPassword('');
+        } catch (error) {
+            Alert.alert("Erro", "Falha ao salvar credenciais");
+        }
     };
 
-    const limparTexto = async () => {
-        await SecureStore.deleteItemAsync("meuTexto");
-        setTextoPersistido("");
-        setTextoSalvoSemPersistencia("");
-        alert("Texto apagado da persistência!");
+    const clearStoredCredentials = async () => {
+        try {
+            await SecureStore.deleteItemAsync("userEmail");
+            await SecureStore.deleteItemAsync("userPassword");
+            setSavedEmail('');
+            setSavedPassword('');
+            Alert.alert("Sucesso", "Credenciais apagadas!");
+        } catch (error) {
+            Alert.alert("Erro", "Falha ao apagar credenciais");
+        }
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.titulo}>Persistência e Navegação</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Digite seu nome"
-                value={texto}
-                onChangeText={setTexto}
-            />
-
-
-            <TextInput
-                style={styles.input}
-                placeholder="Digite seu email"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-            />
-
-            <TextInput
-                style={styles.input}
-                placeholder="Digite sua senha"
-                value={senha}
-                onChangeText={setSenha}
-                secureTextEntry={true} 
-            />
-
-            <TextoExibido titulo="Sem persistência" texto={textoSalvoSemPersistencia} cor="#AA1945" />
-            <TextoExibido titulo="Texto persistido" texto={textoPersistido} cor="#CC8899" />
-
-            <TouchableOpacity style={styles.botao} onPress={salvarTexto}>
-                <Text style={styles.textoBotao}>Salvar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.botao} onPress={limparTexto}>
-                <Text style={styles.textoBotao}>Limpar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                style={styles.botao}
-                onPress={() => navigation.navigate("Detalhes", { textoNaoPersistido: textoSalvoSemPersistencia })}
-            >
-                <Text style={styles.textoBotao}>Detalhes</Text>
-            </TouchableOpacity>
-        </View>
+        <ImageBackground source={require('../img/fundo.jpg')} style={styles.background}>
+            <View style={styles.overlay} />
+            <View style={styles.container}>
+                <Text style={styles.title}>Welcome Back</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Email"
+                    placeholderTextColor="#B0A496"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    placeholderTextColor="#B0A496"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                />
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate("Detalhes", { textoNaoPersistido: textoSalvoSemPersistencia })}
+                >
+                    <Text style={styles.buttonText}>Detalhes</Text>
+                </TouchableOpacity>
+            </View>
+        </ImageBackground>
     );
-}
+};
 
 const styles = StyleSheet.create({
+    background: {
+        flex: 1,
+        resizeMode: 'cover',
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0, 0, 0, 0.4)', // Cor preta com 40% de opacidade
+    },
     container: {
         flex: 1,
-        paddingVertical: 100,
-        paddingHorizontal: 25,
-        gap: 20,
-        backgroundColor: "#FADCD9",
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
     },
-
-    titulo: {
-        fontSize: 32,
-        textAlign: "center",
-        color: "#391306",
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#FFF',
+        marginBottom: 20,
     },
-
     input: {
+        width: '100%',
+        backgroundColor: '#FFF',
+        padding: 15,
+        borderRadius: 10,
+        marginBottom: 15,
         borderWidth: 1,
-        borderColor: "#F79489",
-        borderRadius: 8,
-        padding: 10,
-        fontSize: 20,
+        borderColor: '#E0D6CC',
     },
-
-    texto: {
-        fontSize: 20,
-        textAlign: "center",
+    button: {
+        width: '100%',
+        backgroundColor: '#6D4C41',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
     },
-
-    botao: {
-        backgroundColor: "#E8B4B8",
-        padding: 10,
-        borderRadius: 8,
-        alignItems: "center",
+    buttonText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
-
-    textoBotao: {
-        color: "#67595E",
-        fontSize: 20,
+    signupText: {
+        fontWeight: 'bold',
+        color: '#6D4C41',
     },
 });
+
+export default LoginScreen;
