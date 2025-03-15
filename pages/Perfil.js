@@ -2,15 +2,15 @@ import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function ProfileScreen() {
+const ProfileScreen = () => {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
-                <Image source={{ uri: "https://via.placeholder.com/150" }} style={styles.profileImage} />
-                <Text style={styles.profileName}>Miranda West</Text>
+                <Image source={require('../img/FotoPerfil.jpg')} style={styles.perfil}></Image>
+                <Text style={styles.profileName}>Evelyn Oliveira</Text>
                 <Text style={styles.profileBio}>Work hard in silence. Let your success be the noise.</Text>
             </View>
-            
+
             <View style={styles.menuContainer}>
                 <TouchableOpacity style={styles.menuItem}>
                     <Ionicons name="location-outline" size={24} color="#333" />
@@ -31,10 +31,6 @@ export default function ProfileScreen() {
                 <TouchableOpacity style={styles.menuItem}>
                     <Ionicons name="key-outline" size={24} color="#333" />
                     <Text style={styles.menuText}>Passwords</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem}>
-                    <Ionicons name="globe-outline" size={24} color="#333" />
-                    <Text style={styles.menuText}>Language</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>
@@ -88,3 +84,5 @@ const styles = StyleSheet.create({
         color: "#333",
     },
 });
+
+export default ProfileScreen;

@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     },
     overlay: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)', // Cor preta com 40% de opacidade
+        backgroundColor: 'rgba(0, 0, 0, 0.4)', 
     },
     container: {
         flex: 1,

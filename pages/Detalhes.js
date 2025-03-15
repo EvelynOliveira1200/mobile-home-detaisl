@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground } from "react-native";
 import * as SecureStore from "expo-secure-store";
 
-export default function CadastroScreen() {
+const DetalhesScreen = ({ navigation }) => {
+
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [confirmEmail, setConfirmEmail] = useState('');
@@ -22,6 +23,9 @@ export default function CadastroScreen() {
             await SecureStore.setItemAsync("userEmail", email);
             await SecureStore.setItemAsync("userPassword", password);
             Alert.alert("Sucesso", "Cadastro realizado com sucesso!");
+
+            navigation.navigate("Perfil");
+
             setUsername('');
             setEmail('');
             setConfirmEmail('');
@@ -36,7 +40,7 @@ export default function CadastroScreen() {
             <View style={styles.overlay} />
             <View style={styles.container}>
                 <Text style={styles.titulo}>Cadastro</Text>
-                
+
                 <TextInput
                     style={styles.input}
                     placeholder="Nome de usuário"
@@ -45,7 +49,7 @@ export default function CadastroScreen() {
                     onChangeText={setUsername}
                     autoCapitalize="none"
                 />
-                
+
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
@@ -55,7 +59,7 @@ export default function CadastroScreen() {
                     keyboardType="email-address"
                     autoCapitalize="none"
                 />
-                
+
                 <TextInput
                     style={styles.input}
                     placeholder="Confirme seu Email"
@@ -75,10 +79,10 @@ export default function CadastroScreen() {
                     onChangeText={setPassword}
                 />
 
-                <TouchableOpacity style={styles.botao} onPress={salvarCredenciais}>
-                style={styles.button}
-                onPress={() => navigation.navigate("Perfil")}
-        
+                <TouchableOpacity
+                    style={styles.botao}
+                    onPress={salvarCredenciais}
+                >
                     <Text style={styles.textoBotao}>Cadastrar</Text>
                 </TouchableOpacity>
             </View>
@@ -93,7 +97,7 @@ const styles = StyleSheet.create({
     },
     overlay: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)', 
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
     },
     container: {
         flex: 1,
@@ -116,17 +120,18 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#E0D6CC',
     },
-
     botao: {
-    width: '100%',
-    backgroundColor: '#6D4C41',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-},
-   textoBotao: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-},
+        width: '100%',
+        backgroundColor: '#6D4C41',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    textoBotao: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
 });
+
+export default DetalhesScreen;
