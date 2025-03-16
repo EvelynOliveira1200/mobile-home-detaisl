@@ -56,14 +56,14 @@ const LoginScreen = ({ navigation }) => {
     };
 
     return (
-        <ImageBackground source={require('../img/fundo.jpg')} style={styles.background}>
+        <ImageBackground source={require('../img/funfopreto.jpg')} style={styles.background} resizeMode="cover">
             <View style={styles.overlay} />
             <View style={styles.container}>
                 <Text style={styles.title}>Welcome Back</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
-                    placeholderTextColor="#B0A496"
+                    placeholderTextColor="#747474"
                     value={email}
                     onChangeText={setEmail}
                     keyboardType="email-address"
@@ -71,7 +71,7 @@ const LoginScreen = ({ navigation }) => {
                 <TextInput
                     style={styles.input}
                     placeholder="Password"
-                    placeholderTextColor="#B0A496"
+                    placeholderTextColor="#747474"
                     secureTextEntry
                     value={password}
                     onChangeText={setPassword}
@@ -80,7 +80,7 @@ const LoginScreen = ({ navigation }) => {
                     style={styles.button}
                     onPress={() => navigation.navigate("Detalhes", { textoNaoPersistido: textoSalvoSemPersistencia })}
                 >
-                    <Text style={styles.buttonText}>Detalhes</Text>
+                    <Text style={styles.buttonText}>Sign In</Text>
                 </TouchableOpacity>
             </View>
         </ImageBackground>
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     input: {
-        width: '100%',
+        width: '90%',
         backgroundColor: '#FFF',
         padding: 15,
         borderRadius: 10,
@@ -118,8 +118,8 @@ const styles = StyleSheet.create({
         borderColor: '#E0D6CC',
     },
     button: {
-        width: '100%',
-        backgroundColor: '#6D4C41',
+        width: '90%',
+        backgroundColor: '#747474',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
@@ -128,10 +128,6 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 16,
         fontWeight: 'bold',
-    },
-    signupText: {
-        fontWeight: 'bold',
-        color: '#6D4C41',
     },
 });
 

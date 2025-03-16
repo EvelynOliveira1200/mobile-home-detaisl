@@ -1,21 +1,23 @@
 import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground } from "react-native";
 import * as SecureStore from "expo-secure-store";
 
-const DetalhesScreen = ({ navigation }) => {
+export default function CadastroScreen() {
+    const navigation = useNavigation();
 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
-    const [confirmEmail, setConfirmEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmSenha, setConfirmSenha] = useState('');
 
     const salvarCredenciais = async () => {
-        if (username.trim() === "" || email.trim() === "" || confirmEmail.trim() === "" || password.trim() === "") {
+        if (username.trim() === "" || email.trim() === "" || confirmSenha.trim() === "" || password.trim() === "") {
             Alert.alert("Erro", "Preencha todos os campos");
             return;
         }
-        if (email !== confirmEmail) {
-            Alert.alert("Erro", "Os emails não coincidem");
+        if (password !== confirmSenha) {
+            Alert.alert("Erro", "As senhas não coincidem");
             return;
         }
         try {
@@ -28,63 +30,67 @@ const DetalhesScreen = ({ navigation }) => {
 
             setUsername('');
             setEmail('');
-            setConfirmEmail('');
             setPassword('');
+            setConfirmSenha('');
         } catch (error) {
             Alert.alert("Erro", "Falha ao salvar credenciais");
         }
     };
 
     return (
-        <ImageBackground source={require('../img/fundo.jpg')} style={styles.background}>
+        <ImageBackground source={require('../img/funfopreto.jpg')} style={styles.background}>
             <View style={styles.overlay} />
             <View style={styles.container}>
-                <Text style={styles.titulo}>Cadastro</Text>
-
+                <Text style={styles.titulo}>Sign Up</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Nome de usuário"
-                    placeholderTextColor="#B0A496"
+                    placeholderTextColor="#747474"
                     value={username}
                     onChangeText={setUsername}
                     autoCapitalize="none"
                 />
-
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
-                    placeholderTextColor="#B0A496"
+                    placeholderTextColor="#747474"
                     value={email}
                     onChangeText={setEmail}
                     keyboardType="email-address"
                     autoCapitalize="none"
                 />
-
-                <TextInput
-                    style={styles.input}
-                    placeholder="Confirme seu Email"
-                    placeholderTextColor="#B0A496"
-                    value={confirmEmail}
-                    onChangeText={setConfirmEmail}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                />
-
                 <TextInput
                     style={styles.input}
                     placeholder="Senha"
-                    placeholderTextColor="#B0A496"
+                    placeholderTextColor="#747474"
                     secureTextEntry
                     value={password}
                     onChangeText={setPassword}
                 />
-
+                <TextInput
+                    style={styles.input}
+                    placeholder="Confirme sua Senha"
+                    placeholderTextColor="#747474"
+                    secureTextEntry
+                    value={confirmSenha}
+                    onChangeText={setConfirmSenha}
+                    autoCapitalize="none"
+                />
+                <View style={styles.div}>
                 <TouchableOpacity
                     style={styles.botao}
                     onPress={salvarCredenciais}
                 >
-                    <Text style={styles.textoBotao}>Cadastrar</Text>
+                    <Text style={styles.textoBotao}>Sign Up</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.botao2}
+                    onPress={() => navigation.navigate("Home")}
+                >
+                    <Text style={styles.textoBotao}>Sign In</Text>
+                </TouchableOpacity>
+            </View>
             </View>
         </ImageBackground>
     );
@@ -112,7 +118,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     input: {
-        width: '100%',
+        width: '90%',
         backgroundColor: '#FFF',
         padding: 15,
         borderRadius: 10,
@@ -120,9 +126,16 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#E0D6CC',
     },
+    div: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: "100%",
+        paddingHorizontal: 20,
+        margin: 10,
+    },
     botao: {
-        width: '100%',
-        backgroundColor: '#6D4C41',
+        width: '45%',
+        backgroundColor: '#444444',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
@@ -132,6 +145,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
+    botao2: {
+        width: '45%',
+        backgroundColor: '#747474',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
 });
-
-export default DetalhesScreen;
