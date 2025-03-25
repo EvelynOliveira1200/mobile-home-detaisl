@@ -14,10 +14,8 @@ const LoginScreen = ({ navigation }) => {
             try {
                 const storedEmail = await SecureStore.getItemAsync("userEmail");
                 const storedPassword = await SecureStore.getItemAsync("userPassword");
-                if (storedEmail && storedPassword) {
-                    setSavedEmail(storedEmail);
-                    setSavedPassword(storedPassword);
-                }
+                if (storedEmail) setSavedEmail(storedEmail);
+                if (storedPassword) setSavedPassword(storedPassword);
             } catch (error) {
                 Alert.alert("Erro", "Falha ao carregar credenciais");
             }
@@ -25,19 +23,37 @@ const LoginScreen = ({ navigation }) => {
         loadCredentials();
     }, []);
 
+    const validateEmail = (email) => {
+        return email.includes("@") && email.includes(".");
+    };
+
     const handleLogin = async () => {
         if (!email.trim() || !password.trim()) {
             Alert.alert("Erro", "Por favor, preencha todos os campos.");
             return;
         }
+
+        if (!validateEmail(email)) {
+            Alert.alert("Erro", "Por favor, insira um email válido.");
+            return;
+        }
+
+        if (password.length < 6) {
+            Alert.alert("Erro", "A senha deve ter pelo menos 6 caracteres.");
+            return;
+        }
+
         try {
             await SecureStore.setItemAsync("userEmail", email);
             await SecureStore.setItemAsync("userPassword", password);
             setSavedEmail(email);
             setSavedPassword(password);
             Alert.alert("Sucesso", "Login realizado com sucesso!");
+
             setEmail('');
             setPassword('');
+
+            navigation.navigate("Perfil", { textoNaoPersistido: textoSalvoSemPersistencia });
         } catch (error) {
             Alert.alert("Erro", "Falha ao salvar credenciais");
         }
@@ -78,7 +94,7 @@ const LoginScreen = ({ navigation }) => {
                 />
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate("Detalhes", { textoNaoPersistido: textoSalvoSemPersistencia })}
+                    onPress={handleLogin}
                 >
                     <Text style={styles.buttonText}>Sign In</Text>
                 </TouchableOpacity>
@@ -94,7 +110,7 @@ const styles = StyleSheet.create({
     },
     overlay: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)', 
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
     },
     container: {
         flex: 1,

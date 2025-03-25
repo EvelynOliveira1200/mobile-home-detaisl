@@ -11,27 +11,54 @@ export default function CadastroScreen() {
     const [password, setPassword] = useState('');
     const [confirmSenha, setConfirmSenha] = useState('');
 
+    const validarUsername = (username) => {
+        const usernameRegex = /^[a-zA-Z]{3,}[0-9_]{2,}$/;
+        return usernameRegex.test(username);
+    };
+
+    const validarEmail = (email) => {
+        return email.includes("@") && email.includes(".");
+    };
+
     const salvarCredenciais = async () => {
-        if (username.trim() === "" || email.trim() === "" || confirmSenha.trim() === "" || password.trim() === "") {
+        if (!username || !email || !password || !confirmSenha) {
             Alert.alert("Erro", "Preencha todos os campos");
             return;
+        } 
+        
+        if (!validarUsername(username)) {
+        Alert.alert("Erro", "O nome de usuário deve ter pelo menos 4 letras seguidas por 2 ou 3 números ou sinais como ");
+        return;
+    }
+
+        if (!validarEmail(email)) {
+            Alert.alert("Erro", "Insira um e-mail válido");
+            return;
         }
+
+        if (password.length < 6) {
+            Alert.alert("Erro", "A senha deve ter pelo menos 6 caracteres");
+            return;
+        }
+
         if (password !== confirmSenha) {
             Alert.alert("Erro", "As senhas não coincidem");
             return;
         }
+
         try {
             await SecureStore.setItemAsync("username", username);
             await SecureStore.setItemAsync("userEmail", email);
             await SecureStore.setItemAsync("userPassword", password);
-            Alert.alert("Sucesso", "Cadastro realizado com sucesso!");
 
-            navigation.navigate("Perfil");
+            Alert.alert("Sucesso", "Cadastro realizado com sucesso!");
 
             setUsername('');
             setEmail('');
             setPassword('');
             setConfirmSenha('');
+
+            navigation.navigate("Perfil");
         } catch (error) {
             Alert.alert("Erro", "Falha ao salvar credenciais");
         }
@@ -42,6 +69,7 @@ export default function CadastroScreen() {
             <View style={styles.overlay} />
             <View style={styles.container}>
                 <Text style={styles.titulo}>Sign Up</Text>
+
                 <TextInput
                     style={styles.input}
                     placeholder="Nome de usuário"
@@ -50,6 +78,7 @@ export default function CadastroScreen() {
                     onChangeText={setUsername}
                     autoCapitalize="none"
                 />
+
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
@@ -59,6 +88,7 @@ export default function CadastroScreen() {
                     keyboardType="email-address"
                     autoCapitalize="none"
                 />
+
                 <TextInput
                     style={styles.input}
                     placeholder="Senha"
@@ -67,6 +97,7 @@ export default function CadastroScreen() {
                     value={password}
                     onChangeText={setPassword}
                 />
+
                 <TextInput
                     style={styles.input}
                     placeholder="Confirme sua Senha"
@@ -76,21 +107,22 @@ export default function CadastroScreen() {
                     onChangeText={setConfirmSenha}
                     autoCapitalize="none"
                 />
-                <View style={styles.div}>
-                <TouchableOpacity
-                    style={styles.botao}
-                    onPress={salvarCredenciais}
-                >
-                    <Text style={styles.textoBotao}>Sign Up</Text>
-                </TouchableOpacity>
 
-                <TouchableOpacity
-                    style={styles.botao2}
-                    onPress={() => navigation.navigate("Home")}
-                >
-                    <Text style={styles.textoBotao}>Sign In</Text>
-                </TouchableOpacity>
-            </View>
+                <View style={styles.div}>
+                    <TouchableOpacity
+                        style={styles.botao}
+                        onPress={salvarCredenciais}
+                    >
+                        <Text style={styles.textoBotao}>Sign Up</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.botao2}
+                        onPress={() => navigation.navigate("Home")}
+                    >
+                        <Text style={styles.textoBotao}>Sign In</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </ImageBackground>
     );
