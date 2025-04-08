@@ -3,10 +3,9 @@ import { View, Text, TouchableOpacity, Image, ImageBackground, StyleSheet } from
 
 const InicioScreen = ({ navigation }) => {
     return (
-        <ImageBackground source={require('../img/funfopreto.jpg')} style={styles.background} resizeMode="cover">
-            <View style={styles.overlay} />
+        <ImageBackground source={require('../img/fundopreto.png')} style={styles.background} resizeMode="cover">
             <View style={styles.container}>
-                <Image source={require('../img/elemento1.png')} style={styles.img}></Image>
+                <Image source={require('../img/confeitaria.png')} style={styles.img}></Image>
                 <Text style={styles.title}>Welcome</Text>
                 <Text style={styles.text}>Sign up for a secure and easy experience!</Text>
                 <View style={styles.div}>
@@ -15,12 +14,6 @@ const InicioScreen = ({ navigation }) => {
                         style={styles.button1} onPress={() => navigation.navigate("Home")}
                     >
                         <Text style={styles.buttonText}>Sign In</Text>
-                    </TouchableOpacity>
-                   
-                    <TouchableOpacity
-                        style={styles.button2} onPress={() => navigation.navigate("Detalhes")}
-                    >
-                        <Text style={styles.buttonText}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -33,10 +26,6 @@ const styles = StyleSheet.create({
         flex: 1,
         resizeMode: 'cover',
     },
-    overlay: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    },
     container: {
         flex: 1,
         justifyContent: "center",
@@ -45,8 +34,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#fffff",
     },
     img: {
-        width: 200,
-        height: 200,
+        width: 230,
+        height: 230,
         borderRadius: 50,
     },
     title: {
@@ -69,7 +58,7 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     button1: {
-        width: '46%',
+        width: '100%',
         backgroundColor: '#444444',
         padding: 15,
         borderRadius: 10,
@@ -80,14 +69,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
-    button2: {
-        width: '46%',
-        backgroundColor: '#747474',
-        padding: 15,
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-
 });
 
 export default InicioScreen;

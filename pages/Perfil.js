@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 const ProfileScreen = () => {
     return (
-        <ImageBackground source={require('../img/funfopreto.jpg')} style={styles.background}>
+        <ImageBackground source={require('../img/fundopreto.png')} style={styles.background}>
             <View style={styles.overlay} />
             <ScrollView style={styles.container}>
                 <View style={styles.header}>
@@ -34,7 +34,6 @@ const ProfileScreen = () => {
                         <Ionicons name="key-outline" size={24} color="#333" />
                         <Text style={styles.menuText}>Passwords</Text>
                     </TouchableOpacity>
-            
             </View>
         </ScrollView>
         </ImageBackground>
@@ -51,14 +50,11 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFF",
         margin: 10,
         borderRadius: 10,
+        marginTop: 20,
     },
     background: {
         flex: 1,
         resizeMode: 'cover',
-    },
-    overlay: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
     },
     perfil: {
         width: 100,

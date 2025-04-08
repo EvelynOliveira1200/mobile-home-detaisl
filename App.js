@@ -20,8 +20,8 @@ export default function App() {
                     options={{
                         headerTitle: () => (
                             <Image
-                                source={require("./img/logo.png")}
-                                style={{ width: 150, height: 90, marginRight: 70 }}
+                                source={require("./img/logobranco.png")}
+                                style={{ width: 110, height: 50, marginRight: 70 }}
                             />
                         ),
                     }}
@@ -32,8 +32,8 @@ export default function App() {
                     options={{
                         headerTitle: () => (
                             <Image
-                                source={require('./img/logo.png')}
-                                style={{ width: 150, height: 90, marginRight: 70 }}
+                                source={require("./img/logobranco.png")}
+                                style={{ width: 110, height: 50, marginRight: 70 }}
                             />
                         ),
                     }}
@@ -42,8 +42,8 @@ export default function App() {
                     options={{
                         headerTitle: () => (
                             <Image
-                                source={require('./img/logo.png')}
-                                style={{ width: 150, height: 90, marginRight: 70 }}
+                                source={require("./img/logobranco.png")}
+                                style={{ width: 110, height: 50, marginRight: 70 }}
                             />
                         ),
                     }}
@@ -52,8 +52,8 @@ export default function App() {
                     options={{
                         headerTitle: () => (
                             <Image
-                                source={require('./img/logo.png')}
-                                style={{ width: 150, height: 90, marginRight: 70 }}
+                                source={require("./img/logobranco.png")}
+                                style={{ width: 110, height: 50, marginRight: 70 }}
                             />
                         ),
                     }} />
