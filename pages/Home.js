@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Alert } from 'react-native';
+import React, { useState, useEffect, use } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Alert } from "react-native";
 import * as SecureStore from 'expo-secure-store';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -13,8 +13,10 @@ export default function LoginScreen({ navigation }) {
             const emailSalvo = await SecureStore.getItemAsync("userEmail");
             const senhaSalva = await SecureStore.getItemAsync("userPassword");
 
-            if (emailSalvo) setEmail(emailSalvo);
-            if (senhaSalva) setPassword(senhaSalva);
+            if (emailSalvo && senhaSalva) {
+                setEmail(emailSalvo);
+                setPassword(senhaSalva)
+            }
         };
         carregarCredenciais();
     }, []);
@@ -25,8 +27,9 @@ export default function LoginScreen({ navigation }) {
             await SecureStore.setItemAsync("userPassword", password);
             Alert.alert("Sucesso", "Login realizado e dados salvos!");
             navigation.navigate("Detalhes");
+
         } catch (error) {
-            Alert.alert("Erro", "Falha ao salvar os dados.");
+            Alert.alert("Erro", "Erro ao salvar os dados de login.");
         }
     };
 
@@ -47,7 +50,7 @@ export default function LoginScreen({ navigation }) {
 
                 <View style={styles.passwordContainer}>
                     <TextInput
-                        style={[styles.input, { paddingRight: 40 }]} 
+                        style={[styles.input, { paddingRight: 40 }]}
                         placeholder="Password"
                         placeholderTextColor="#747474"
                         secureTextEntry={!showPassword}
@@ -64,14 +67,18 @@ export default function LoginScreen({ navigation }) {
                         />
                     </TouchableOpacity>
                 </View>
-
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                <TouchableOpacity style={styles.button}
+                    onPress={handleLogin}>
                     <Text style={styles.buttonText}>Sign In</Text>
                 </TouchableOpacity>
             </View>
         </ImageBackground>
+
     );
-}
+};
+
+
+
 
 const styles = StyleSheet.create({
     background: {
@@ -135,3 +142,5 @@ const styles = StyleSheet.create({
         transform: [{ translateY: -10 }], 
     },
 });
+
+export { LoginScreen };

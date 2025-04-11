@@ -20,13 +20,12 @@ export default function CadastroScreen() {
             const emailSalvo = await SecureStore.getItemAsync("userEmail");
             const senhaSalva = await SecureStore.getItemAsync("userPassword");
 
-            if (nomeSalvo) setUsername(nomeSalvo);
-            if (emailSalvo) setEmail(emailSalvo);
-            if (senhaSalva) {
+            if (nomeSalvo && emailSalvo && senhaSalva) {
+                setUsername(nomeSalvo);
+                setEmail(emailSalvo);
                 setPassword(senhaSalva);
             }
         };
-
         carregarCredenciaisSalvas();
     }, []);
 
@@ -56,7 +55,6 @@ export default function CadastroScreen() {
                     onChangeText={setUsername}
                     autoCapitalize="none"
                 />
-
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
@@ -79,21 +77,13 @@ export default function CadastroScreen() {
                     />
                     <TouchableOpacity
                         onPress={() => setShowPassword(!showPassword)}
-                        style={styles.eyeTouchable}>
+                        style={styles.eyeTouchable}
+                    >
                         <Icon
                             name={showPassword ? "visibility" : "visibility-off"}
                             size={22}
                             color="#747474"
                         />
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.div}>
-                    <TouchableOpacity
-                        style={styles.botao}
-                        onPress={salvarCredenciais}
-                    >
-                        <Text style={styles.textoBotao}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
             </View>
